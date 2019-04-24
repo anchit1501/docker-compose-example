@@ -5,12 +5,14 @@ FROM node:alpine
 WORKDIR '/app'
 
 # Copy Files 
-COPY ./package.json ./
+COPY package.json .
 
 # Dependencies
 RUN npm install
 
-COPY ./ ./
+COPY . .
+
+EXPOSE 6379
 
 #Default Command
-CMD ["npm","start"]
+CMD ["node","index"]

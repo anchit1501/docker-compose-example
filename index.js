@@ -4,17 +4,25 @@ const process = require('process');
 
 const app=express();
 const client= redis.createClient({
-    host:'redis-server',
+    host:'redis',
     port: 6379
+});
+
+client.on("error", function (err) {
+    console.log("Redis error encountered", err);
+});
+
+client.on("end", function() {
+    console.log("Redis connection closed");
 });
 client.set('visits',0);
 
 app.get('/',(req,res)=>{
-    process.exit(0);
-    client.get('visits'),(err,visits)=>{
+    //process.exit(0);
+    client.get('visits', (err,visits)=>{
         res.send('Number of visits is '+visits);
         client.set('visits',parseInt(visits)+1);
-    }
+    })
 });
 
 app.listen(8081,()=>{
